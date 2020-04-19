@@ -125,14 +125,16 @@ function processData(data) {
     tr += "</tr>";
     t += tr;
     for (var i = 0; i < dataFiltered.length; i++) {
-        var tr = "<tr>";
-        tr += "<td>" + dataFiltered[i].date + "</td>";
-        tr += "<td>" + dataFiltered[i].total_cases + "</td>";
-        tr += "<td>" + dataFiltered[i].new_cases + "</td>";
-        tr += "<td>" + dataFiltered[i].total_deaths + "</td>";
-        tr += "<td>" + dataFiltered[i].new_deaths + "</td>";
-        tr += "</tr>";
-        t += tr;
+        if (dataFiltered[i].total_cases != "0") {
+            var tr = "<tr>";
+            tr += "<td>" + dataFiltered[i].date + "</td>";
+            tr += "<td>" + dataFiltered[i].total_cases + "</td>";
+            tr += "<td>" + dataFiltered[i].new_cases + "</td>";
+            tr += "<td>" + dataFiltered[i].total_deaths + "</td>";
+            tr += "<td>" + dataFiltered[i].new_deaths + "</td>";
+            tr += "</tr>";
+            t += tr;
+        }
     }
     dataTable.innerHTML += t;
 } 
