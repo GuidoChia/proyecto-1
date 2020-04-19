@@ -22,11 +22,25 @@
     <title>Proyecto 1</title>
 </head>
 <body>
-    <h1>Proyecto 1</h1>
+   <div class="topnav">
+       <div class="logoImage">
+           <img src="https://www.icrc.org//sites/default/themes/icrc_theme/images/en/logo-small.png" class="img_fluid" />
+       </div>
+        <div class="active">
+            INTERNATIONAL COMMITTEE OF THE RED CROSS
+        </div>
+    </div>
+    
+
 
     <select id="location"></select>
 
-    <div id="plot"></div>
+    <div class="plotParent">
+        <div id="linearPlot" class="plotDiv"></div>
+        <div id="logPlot" class="plotDiv"></div>
+    </div>
+
+    <div id="newPlot"></div>
 
     <table id="dataTable"></table>
 

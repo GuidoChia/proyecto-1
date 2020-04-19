@@ -3,6 +3,10 @@ const urlCovidCases = "https://raw.githubusercontent.com/owid/covid-19-data/mast
 var cachedData;
 var selectElement = document.getElementById('location');
 
+var linearPlotDiv = document.getElementById("linearPlot");
+var logPlotDiv = document.getElementById("logPlot");
+var newPlotDiv = document.getElementById("newPlot");
+
 selectElement.onchange = function () { processData(cachedData) };
 
 window.onload = loadData();
@@ -14,6 +18,18 @@ function loadData(){
         complete: function (results) {
             console.log(results);
             processData(results.data);
+            
+            var countries = getCountries(results.data);
+
+            /* Populate select with countries */
+            countries.forEach((element) => {
+                if (element != undefined) {
+                    var opt = document.createElement("option");
+                    opt.value = element;
+                    opt.innerHTML = element;
+                    selectElement.appendChild(opt);
+                }
+            })
             cachedData = results.data;
         }
     })
@@ -28,43 +44,72 @@ function processData(data) {
         currentLocation = opt.value;
     }
     console.log(currentLocation);
-
-    
-
-    var countries = getCountries(data);
-
-    /* Populate select with countries */
-    countries.forEach((element) => {
-        if (element != undefined) {
-            var opt = document.createElement("option");
-            opt.value = element;
-            opt.innerHTML = element;
-            selectElement.appendChild(opt);
-        }
-    })
        
-
-    var plotDiv = document.getElementById("plot");
-
     /* Filter data by country */
     var dataFiltered = data.filter(findByName, currentLocation);
 
     var dates = [];
-    var cases = [];
+    var totalCases = [];
+    var newCases = [];
+    var totalDeaths = [];
+    var newDeaths = [];
 
     dataFiltered.forEach((element) => {
-        dates.push(element["date"]);
-        cases.push(element["total_cases"]);
+        if (element["total_cases"] != "0") {
+            dates.push(element["date"]);
+            totalCases.push(element["total_cases"]);
+            newCases.push(element["new_cases"]);
+            totalDeaths.push(element["total_deaths"]);
+            newDeaths.push(element["new_deaths"]);
+        }
     })
 
-    var countryPlot = {
-        x: dates,
-        y: cases,
-        type: 'scatter',
-        name: currentLocation
-    };
+    var totalDataNames = ["Total cases", "Total deaths"];
+    var totalData = [totalCases, totalDeaths];
 
-    Plotly.newPlot(plotDiv, [countryPlot], undefined, { displayModeBar: false });
+    var totalPlots = [];
+
+    for (i = 0; i < totalData.length; i++) {
+        var casePlot = {
+            x: dates,
+            y: totalData[i],
+            type: 'scatter',
+            name: totalDataNames[i]
+        };
+        totalPlots.push(casePlot);
+    }
+
+    var layoutLinear = { title: currentLocation + ": linear scale"}
+
+    var layoutLog = {
+        title: currentLocation+": logarithmic scale",
+        yaxis: {
+            type: 'log',
+            autorange: true
+        }
+    }
+
+    var newDataNames = ["New cases", "New deaths"];
+    var newData = [newCases, newDeaths];
+
+    var newPlots = [];
+    for (i = 0; i < newData.length; i++) {
+        var casePlot = {
+            x: dates,
+            y: newData[i],
+            type: 'bar',
+            name: newDataNames[i]
+        };
+        newPlots.push(casePlot);
+    }
+
+    var layoutLinear = { title: currentLocation + ": linear scale" };
+
+    var layoutNew = { title: currentLocation + ": daily data" };
+
+    Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, { displayModeBar: false });
+    Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, { displayModeBar: false });
+    Plotly.newPlot(newPlotDiv, newPlots, layoutNew, { displayModeBar: false });
 
     console.log(dataFiltered);
     var dataTable = document.getElementById("dataTable");
@@ -72,10 +117,11 @@ function processData(data) {
 
     var t = "";
     var tr = "<tr>";
-    tr += "<td> Date </td>";
-    tr += "<td> Total cases </td>";
-    tr += "<td> New cases </td>";
-    tr += "<td> Total deaths </td>";
+    tr += "<th> Date </th>";
+    tr += "<th> Total cases </th>";
+    tr += "<th> New cases </th>";
+    tr += "<th> Total deaths </th > ";
+    tr += "<th> New deaths </th > ";
     tr += "</tr>";
     t += tr;
     for (var i = 0; i < dataFiltered.length; i++) {
@@ -84,6 +130,7 @@ function processData(data) {
         tr += "<td>" + dataFiltered[i].total_cases + "</td>";
         tr += "<td>" + dataFiltered[i].new_cases + "</td>";
         tr += "<td>" + dataFiltered[i].total_deaths + "</td>";
+        tr += "<td>" + dataFiltered[i].new_deaths + "</td>";
         tr += "</tr>";
         t += tr;
     }
