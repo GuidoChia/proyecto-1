@@ -2,23 +2,12 @@ html {
     font-family: Corbel
 }
 
-table {
-    width: 100%;
+.navbar-default{
+    background-color: #ff4d4d;
+    padding:1%;
 }
 
-td {
-    height: auto;
-    text-align: center;
-}
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-th {
-    background-color: darkred;
-    color: white;
-}
 
 .plotParent {
     overflow:auto;
@@ -30,22 +19,6 @@ th {
     float: left;   
 }
 
-
-.topnav {
-    background-color: #ff4d4d;
-    width: 100%;
-    overflow: auto;
-}
-
-.topnav div {
-        float: left;
-        padding: 12px;
-        color: white;
-        text-decoration: none;
-        font-size: 17px;
-}
-
-.logoImage {
-    overflow: hidden;
-    margin-top: -6px;
+.img_fluid{
+    float: left;
 }

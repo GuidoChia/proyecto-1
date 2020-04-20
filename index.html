@@ -1,8 +1,14 @@
 ﻿<!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Latest bootstrap compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- Latest bootstrap compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- Import jQuery-->
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"
@@ -21,30 +27,40 @@
 
     <title>Proyecto 1</title>
 </head>
+
 <body>
-   <div class="topnav">
-       <div class="logoImage">
-           <img src="https://www.icrc.org//sites/default/themes/icrc_theme/images/en/logo-small.png" class="img_fluid" />
-       </div>
-        <div class="active">
-            INTERNATIONAL COMMITTEE OF THE RED CROSS
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-head">
+                <img src="https://www.icrc.org//sites/default/themes/icrc_theme/images/en/logo-small.png" class="img_fluid" />
+            </div>
+            
+            <ul class="nav navbar-nav">
+                <li class="active"><h1>INTERNATIONAL COMMITTEE OF THE RED CROSS</h1></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><select class="form-control" id="location"></select></li>
+            </ul>
         </div>
-    </div>
+    </nav>
     
+        <div class="container-fluid">
 
+            <div class="plotParent">
+                <div id="linearPlot" class="plotDiv"></div>
+                <div id="logPlot" class="plotDiv"></div>
+            </div>
 
-    <select id="location"></select>
+            <div id="newPlot"></div>
+            
+            <table id="dataTable" class="table table-bordered"></table>
 
-    <div class="plotParent">
-        <div id="linearPlot" class="plotDiv"></div>
-        <div id="logPlot" class="plotDiv"></div>
-    </div>
+            <!-- JavaScript -->
+            <script src="js/app.js"></script>
 
-    <div id="newPlot"></div>
+        </div>
 
-    <table id="dataTable"></table>
-
-    <!-- JavaScript -->
-    <script src="js/app.js"></script>
 </body>
 </html>

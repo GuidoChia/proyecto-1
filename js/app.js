@@ -1,5 +1,7 @@
 // Each country covid cases
 const urlCovidCases = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv";
+const defaultLocation = "Argentina";
+
 var cachedData;
 var selectElement = document.getElementById('location');
 
@@ -28,6 +30,9 @@ function loadData(){
                     opt.value = element;
                     opt.innerHTML = element;
                     selectElement.appendChild(opt);
+                    if (element == defaultLocation) {
+                        opt.selected = true;
+                    }
                 }
             })
             cachedData = results.data;
@@ -39,7 +44,7 @@ function loadData(){
 function processData(data) {
     var opt = selectElement.options[selectElement.selectedIndex];
     if (opt == undefined) {
-        currentLocation = "Argentina"
+        currentLocation = defaultLocation;
     } else {
         currentLocation = opt.value;
     }
