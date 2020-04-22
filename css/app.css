@@ -3,7 +3,6 @@ html {
 }
 
 .navbar-default{
-    background-color: #ff4d4d;
     padding:1%;
 }
 
@@ -11,7 +10,7 @@ html {
 
 .plotParent {
     overflow:auto;
-    
+    float:initial;    
 }
 
 .plotDiv{
@@ -21,4 +20,6 @@ html {
 
 .img_fluid{
     float: left;
+    max-height:10%;
+    max-width:10%;
 }

@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Latest bootstrap compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <!-- Latest bootstrap compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
     <!-- Import jQuery-->
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"
             integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
             crossorigin="anonymous">
     </script>
+
+    <!-- Latest bootstrap compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- Latest bootstrap compiled JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <!-- Import Plotly for data plotting-->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -29,38 +29,45 @@
 </head>
 
 <body>
+<div class="jumbotron">
+    <div class="form-group">
+        <img src="https://logos-download.com/wp-content/uploads/2016/12/World_Health_Organization_logo_WHO.png"
+             class="img_fluid"/>
+        <select class="form-control" id="location"></select>
+    </div>
+</div>
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-head">
-                <img src="https://www.icrc.org//sites/default/themes/icrc_theme/images/en/logo-small.png" class="img_fluid" />
-            </div>
-            
-            <ul class="nav navbar-nav">
-                <li class="active"><h1>INTERNATIONAL COMMITTEE OF THE RED CROSS</h1></li>
-            </ul>
+<div class="container-fluid">
+    <div class="plotParent">
+        <div id="linearPlot" class="plotDiv"></div>
+        <div id="logPlot" class="plotDiv"></div>
+    </div>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li><select class="form-control" id="location"></select></li>
-            </ul>
+    <div id="newPlot"></div>
+
+    <div class="jumbotron">
+        <div class="container">
+            <h4>Coronavirus disease (COVID-19) is an infectious disease caused by a newly discovered coronavirus.</h4>
+            <p>Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover without
+                special treatment.</p>
+            <p></p>
+            <h4>How it spreads?</h4>
+            <p>
+                The virus that causes COVID-19 is mainly transmitted through droplets generated when an infected person
+                coughs, sneezes, or exhales. These droplets are too heavy to hang in the air, and quickly fall on floors
+                or surfaces.
+                You can be infected by breathing in the virus if you are within close proximity of someone who has
+                COVID-19, or by touching a contaminated surface and then your eyes, nose or mouth.
+            </p>
+            <p><a class="btn btn-primary btn-lg" href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+                  role="button">Learn more on who.int</a></p>
         </div>
-    </nav>
-    
-        <div class="container-fluid">
+    </div>
 
-            <div class="plotParent">
-                <div id="linearPlot" class="plotDiv"></div>
-                <div id="logPlot" class="plotDiv"></div>
-            </div>
+    <table id="dataTable" class="table table-bordered table-sm"></table>
 
-            <div id="newPlot"></div>
-            
-            <table id="dataTable" class="table table-bordered"></table>
-
-            <!-- JavaScript -->
-            <script src="js/app.js"></script>
-
-        </div>
-
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</div>
 </body>
 </html>
