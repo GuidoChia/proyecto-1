@@ -9,6 +9,9 @@ const linearPlotDiv = document.getElementById("linearPlot");
 const logPlotDiv = document.getElementById("logPlot");
 const newPlotDiv = document.getElementById("newPlot");
 
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+toggleSwitch.addEventListener('change', switchTheme, false);
+
 selectElement.onchange = function () {
     processData(cachedData)
 };
@@ -16,6 +19,15 @@ selectElement.onchange = function () {
 window.onload = loadData();
 
 function loadData() {
+    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            toggleSwitch.checked = true;
+        }
+    }
+
     const data = Papa.parse(urlCovidCases, {
         download: true,
         header: true,
@@ -43,14 +55,22 @@ function loadData() {
 
 }
 
-function processData(data) {
-    const opt = selectElement.options[selectElement.selectedIndex];
-    let currentLocation;
-    if (opt == undefined) {
-        currentLocation = defaultLocation;
+function switchTheme(e) {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
     } else {
-        currentLocation = opt.value;
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
     }
+
+    Plotly.relayout(linearPlotDiv, getLinearLayout());
+    Plotly.relayout(logPlotDiv, getLogLayout());
+    Plotly.relayout(newPlotDiv, getNewLayout());
+}
+
+function processData(data) {
+    const currentLocation = getCurrentLocation();
     console.log(currentLocation);
 
     /* Filter data by country */
@@ -77,6 +97,7 @@ function processData(data) {
 
     const totalPlots = [];
 
+
     for (i = 0; i < totalData.length; i++) {
         casePlot = {
             x: dates,
@@ -86,14 +107,6 @@ function processData(data) {
         };
         totalPlots.push(casePlot);
     }
-
-    const layoutLog = {
-        title: currentLocation + ": logarithmic scale",
-        yxis: {
-            type: 'log',
-            autorange: true
-        }
-    };
 
     const newDataNames = ["New cases", "New deaths"];
     const newData = [newCases, newDeaths];
@@ -110,9 +123,12 @@ function processData(data) {
         newPlots.push(casePlot);
     }
 
-    const layoutLinear = {title: currentLocation + ": linear scale"};
+    const layoutLog = getLogLayout();
 
-    const layoutNew = {title: currentLocation + ": daily data"};
+    const layoutLinear = getLinearLayout();
+
+    const layoutNew = getNewLayout();
+
 
     Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, {displayModeBar: false});
     Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false});
@@ -149,6 +165,68 @@ function processData(data) {
     dataTable.innerHTML += t;
 }
 
+function getLogLayout() {
+    const bgColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bg-color');
+    const fontColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--font-color');
+    const currentLocation = getCurrentLocation();
+    return {
+        title: currentLocation + ": logarithmic scale",
+        yaxis: {
+            type: 'log',
+            autorange: true
+        },
+        'plot_bgcolor': bgColor,
+        'paper_bgcolor': bgColor,
+        'font': {
+            'color': fontColor
+        }
+    }
+}
+
+function getLinearLayout() {
+    const bgColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bg-color');
+    const fontColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--font-color');
+    const currentLocation = getCurrentLocation();
+    return {
+        title: currentLocation + ": linear scale",
+        'plot_bgcolor': bgColor,
+        'paper_bgcolor': bgColor,
+        'font': {
+            'color': fontColor
+        }
+    }
+}
+
+function getNewLayout() {
+    const bgColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bg-color');
+    const fontColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--font-color');
+    const currentLocation = getCurrentLocation();
+    return {
+        title: currentLocation + ": daily data",
+        'plot_bgcolor': bgColor,
+        'paper_bgcolor': bgColor,
+        'font': {
+            'color': fontColor
+        }
+    }
+}
+
+function getCurrentLocation() {
+    const opt = selectElement.options[selectElement.selectedIndex];
+    let currentLocation;
+    if (opt == undefined) {
+        currentLocation = defaultLocation;
+    } else {
+        currentLocation = opt.value;
+    }
+    return currentLocation;
+}
 
 function findByName(dataRow) {
     return dataRow["location"] == this;
