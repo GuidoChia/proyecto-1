@@ -71,7 +71,7 @@ h1 {
     margin: 10px;
 }
 
-em {
+.theme-switch-wrapper em {
     margin-left: 10px;
     font-size: 1rem;
 }

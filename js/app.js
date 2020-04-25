@@ -32,7 +32,6 @@ function loadData() {
         download: true,
         header: true,
         complete: function (results) {
-            console.log(results);
             processData(results.data);
 
             const countries = getCountries(results.data);
@@ -50,6 +49,9 @@ function loadData() {
                 }
             })
             cachedData = results.data;
+        },
+        error: function(err, file, inputElem, reason){
+            alert(err);
         }
     });
 
