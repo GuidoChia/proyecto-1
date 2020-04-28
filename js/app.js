@@ -28,33 +28,43 @@ function loadData() {
         }
     }
 
-    const data = Papa.parse(urlCovidCases, {
-        download: true,
+    fetch(urlCovidCases)
+        .then((response) => response.text()).then(text => parseAndProcess(text))
+        .catch((error) => {
+            console.error(error);
+            // LLAMAR AL ARCHIVO MIO
+
+        });
+
+}
+
+function parseAndProcess(text, download) {
+    const data = Papa.parse(text, {
         header: true,
         complete: function (results) {
-            processData(results.data);
-
-            const countries = getCountries(results.data);
-
-            /* Populate select with countries */
-            countries.forEach((element) => {
-                if (element !== undefined) {
-                    const opt = document.createElement("option");
-                    opt.value = element;
-                    opt.innerHTML = element;
-                    selectElement.appendChild(opt);
-                    if (element == defaultLocation) {
-                        opt.selected = true;
-                    }
-                }
-            })
             cachedData = results.data;
-        },
-        error: function(err, file, inputElem, reason){
-            alert(err);
+            processData(results.data);
+            populateSelect(results.data);
         }
     });
+}
 
+
+function populateSelect(data) {
+    const countries = getCountries(data);
+
+    /* Populate select with countries */
+    countries.forEach((element) => {
+        if (element !== undefined) {
+            const opt = document.createElement("option");
+            opt.value = element;
+            opt.innerHTML = element;
+            selectElement.appendChild(opt);
+            if (element == defaultLocation) {
+                opt.selected = true;
+            }
+        }
+    })
 }
 
 function switchTheme(e) {
