@@ -1,6 +1,6 @@
 // Each country COVID-19 cases
 const urlCovidCases = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv";
-const defaultLocation = "Argentina";
+const defaultLocation = "World";
 
 let cachedData;
 const selectElement = document.getElementById('location');
@@ -32,8 +32,8 @@ function loadData() {
         .then((response) => response.text()).then(text => parseAndProcess(text))
         .catch((error) => {
             console.error(error);
-            // LLAMAR AL ARCHIVO MIO
-
+            alert("La información puede estar desactualizada, ya que no pudimos conectar con la base de datos.")
+            parseAndProcess(getData());
         });
 
 }
@@ -83,7 +83,6 @@ function switchTheme(e) {
 
 function processData(data) {
     const currentLocation = getCurrentLocation();
-    console.log(currentLocation);
 
     /* Filter data by country */
     const dataFiltered = data.filter(findByName, currentLocation);
@@ -141,12 +140,10 @@ function processData(data) {
 
     const layoutNew = getNewLayout();
 
-
     Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, {displayModeBar: false});
     Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false});
     Plotly.newPlot(newPlotDiv, newPlots, layoutNew, {displayModeBar: false});
 
-    console.log(dataFiltered);
     const dataTable = document.getElementById("dataTable");
 
     dataTable.innerHTML = "";
