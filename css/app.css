@@ -23,10 +23,7 @@ body {
     color: var(--font-color);
 }
 
-h1 {
-    margin-left: 30%;
-    margin-right: revert;
-}
+
 
 .btn{
     background-color: var(--secondary-color);
@@ -37,21 +34,16 @@ h1 {
     float: initial;
 }
 
-.plotDiv {
-    width: 49%;
-    float: left;
-}
+
 
 .img_fluid {
-    float: left;
-    max-height: 7%;
-    max-width: 7%;
+    max-height: 100pt;
+    max-width: 100pt;
 }
 
 
 .form-control {
-    max-width: 20%;
-    float: right;
+    float: bottom;
 }
 
 .jumbotron {

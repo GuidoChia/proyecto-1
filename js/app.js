@@ -32,7 +32,7 @@ function loadData() {
         .then((response) => response.text()).then(text => parseAndProcess(text))
         .catch((error) => {
             console.error(error);
-            alert("La información puede estar desactualizada, ya que no pudimos conectar con la base de datos.")
+            alert("Information could be old, beacause we couldn't reach the server.")
             parseAndProcess(getData());
         });
 
@@ -140,9 +140,9 @@ function processData(data) {
 
     const layoutNew = getNewLayout();
 
-    Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, {displayModeBar: false});
-    Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false});
-    Plotly.newPlot(newPlotDiv, newPlots, layoutNew, {displayModeBar: false});
+    Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, {displayModeBar: false, responsive: true});
+    Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false, responsive: true});
+    Plotly.newPlot(newPlotDiv, newPlots, layoutNew, {displayModeBar: false, responsive: true});
 
     const dataTable = document.getElementById("dataTable");
 
@@ -174,16 +174,21 @@ function processData(data) {
     dataTable.innerHTML += t;
 }
 
-function getLogLayout() {
+function layoutConstants() {
     const bgColor = getComputedStyle(document.documentElement)
         .getPropertyValue('--bg-color');
     const fontColor = getComputedStyle(document.documentElement)
         .getPropertyValue('--font-color');
     const currentLocation = getCurrentLocation();
+    return {bgColor, fontColor, currentLocation};
+}
+
+function getLayout(layoutType, title){
+    const {bgColor, fontColor, currentLocation} = layoutConstants();
     return {
-        title: currentLocation + ": logarithmic scale",
+        title: currentLocation +": "+title,
         yaxis: {
-            type: 'log',
+            type: layoutType,
             autorange: true
         },
         'plot_bgcolor': bgColor,
@@ -194,36 +199,17 @@ function getLogLayout() {
     }
 }
 
+
+function getLogLayout() {
+    return getLayout("log", "logarithmic scale")
+}
+
 function getLinearLayout() {
-    const bgColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bg-color');
-    const fontColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--font-color');
-    const currentLocation = getCurrentLocation();
-    return {
-        title: currentLocation + ": linear scale",
-        'plot_bgcolor': bgColor,
-        'paper_bgcolor': bgColor,
-        'font': {
-            'color': fontColor
-        }
-    }
+    return getLayout("linear", "linear scale")
 }
 
 function getNewLayout() {
-    const bgColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bg-color');
-    const fontColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--font-color');
-    const currentLocation = getCurrentLocation();
-    return {
-        title: currentLocation + ": daily data",
-        'plot_bgcolor': bgColor,
-        'paper_bgcolor': bgColor,
-        'font': {
-            'color': fontColor
-        }
-    }
+    return getLayout("linear", "daily data")
 }
 
 function getCurrentLocation() {
