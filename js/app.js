@@ -9,7 +9,7 @@ const linearPlotDiv = document.getElementById("linearPlot");
 const logPlotDiv = document.getElementById("logPlot");
 const newPlotDiv = document.getElementById("newPlot");
 
-const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const toggleSwitch = document.getElementById("checkbox");
 toggleSwitch.addEventListener('change', switchTheme, false);
 
 selectElement.onchange = function () {
@@ -48,6 +48,8 @@ function parseAndProcess(text, download) {
         }
     });
 }
+
+
 
 
 function populateSelect(data) {
@@ -144,24 +146,12 @@ function processData(data) {
     Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false, responsive: true});
     Plotly.newPlot(newPlotDiv, newPlots, layoutNew, {displayModeBar: false, responsive: true});
 
-    const dataTable = document.getElementById("dataTable");
-
-    dataTable.innerHTML = "";
-
-    let t = "";
-    let tr = "<tr>";
-    tr += "<th> Date </th>";
-    tr += "<th> Total cases </th>";
-    tr += "<th> New cases </th>";
-    tr += "<th> Total deaths </th > ";
-    tr += "<th> New deaths </th > ";
-    tr += "</tr>";
-    t += "<thead>" + tr + "</thead>";
-    t += "<tbody>"
+    let t = "<tbody>"
+    let tr;
     for (var i = 0; i < dataFiltered.length; i++) {
         if (dataFiltered[i].total_cases != "0") {
             tr = "<tr>";
-            tr += "<td>" + dataFiltered[i].date + "</td>";
+            tr += "<td> " + dataFiltered[i].date + "</td>";
             tr += "<td>" + dataFiltered[i].total_cases + "</td>";
             tr += "<td>" + dataFiltered[i].new_cases + "</td>";
             tr += "<td>" + dataFiltered[i].total_deaths + "</td>";
@@ -171,6 +161,7 @@ function processData(data) {
         }
     }
     t += "</tbody>";
+    const dataTable = document.getElementById("dataTable");
     dataTable.innerHTML += t;
 }
 
@@ -195,6 +186,10 @@ function getLayout(layoutType, title){
         'paper_bgcolor': bgColor,
         'font': {
             'color': fontColor
+        },
+        legend:{
+            x:0,
+            y:1
         }
     }
 }

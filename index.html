@@ -29,82 +29,87 @@
 </head>
 
 <body>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-2 align-text-center">
+            <img src="https://logos-download.com/wp-content/uploads/2016/12/World_Health_Organization_logo_WHO.png"
+                 class="rounded align-self-sm-center img_fluid"/>
+        </div>
+        <div class="col-sm float-left align-text-center">
+            <h1>COVID-19 live visualization</h1>
+        </div>
+        <div class="col-sm-2">
+            <div class="custom-control custom-switch align-text-center">
+                <input type="checkbox" class="custom-control-input" id="checkbox"/>
+                <label class="custom-control-label" for="checkbox">Change theme</label>
+            </div>
+            <select class="form-control" id="location"></select>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid">
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-sm-2">
-                <img src="https://logos-download.com/wp-content/uploads/2016/12/World_Health_Organization_logo_WHO.png"
-                     class="rounded align-self-sm-center img_fluid"/>
-            </div>
-            <div class="col-sm float-left">
-                <h1>COVID-19 live visualization</h1>
-            </div>
-            <div class="col-sm-2">
-                <select class="form-control" id="location"></select>
-
-                <div class="theme-switch-wrapper">
-                    <p style="margin: 10px">Change theme</p>
-                    <label class="theme-switch" for="checkbox">
-                        <input type="checkbox" id="checkbox"/>
-                        <div class="slider round"></div>
-                    </label>
+    <div class="row plotParent">
+        <div class="col-sm">
+            <div id="linearPlot"></div>
+        </div>
+        <div class="col-sm">
+            <div id="logPlot"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div id="newPlot"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="jumbotron">
+                <div class="container">
+                    <h4>Coronavirus disease (COVID-19) is an infectious disease caused by a newly discovered
+                        coronavirus.</h4>
+                    <p>Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover
+                        without
+                        special treatment.</p>
+                    <p></p>
+                    <h4>How it spreads?</h4>
+                    <p>
+                        The virus that causes COVID-19 is mainly transmitted through droplets generated when an
+                        infected
+                        person
+                        coughs, sneezes, or exhales. These droplets are too heavy to hang in the air, and quickly
+                        fall
+                        on
+                        floors
+                        or surfaces.
+                        You can be infected by breathing in the virus if you are within close proximity of someone
+                        who
+                        has
+                        COVID-19, or by touching a contaminated surface and then your eyes, nose or mouth.
+                    </p>
+                    <p><a class="btn btn-primary btn-lg"
+                          href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+                          role="button"
+                          target="_blank">Learn more on who.int</a></p>
                 </div>
             </div>
         </div>
+
+        <table id="dataTable" class="table table-bordered table-responsive-sm">
+            <thead>
+            <th> Date</th>
+            <th> Total cases</th>
+            <th> New cases</th>
+            <th> Total deaths</th>
+            <th> New deaths</th>
+            </thead>
+        </table>
+
+        <!-- JavaScript -->
+        <script src="js/hardcodeddata.js"></script>
+        <script src="js/app.js"></script>
     </div>
 
-    <div class="container-fluid">
-        <div class="row plotParent">
-            <div class="col-sm">
-                <div id="linearPlot"></div>
-            </div>
-            <div class="col-sm">
-                <div id="logPlot"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm">
-                <div id="newPlot"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm">
-                <div class="jumbotron">
-                    <div class="container">
-                        <h4>Coronavirus disease (COVID-19) is an infectious disease caused by a newly discovered
-                            coronavirus.</h4>
-                        <p>Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover
-                            without
-                            special treatment.</p>
-                        <p></p>
-                        <h4>How it spreads?</h4>
-                        <p>
-                            The virus that causes COVID-19 is mainly transmitted through droplets generated when an
-                            infected
-                            person
-                            coughs, sneezes, or exhales. These droplets are too heavy to hang in the air, and quickly
-                            fall
-                            on
-                            floors
-                            or surfaces.
-                            You can be infected by breathing in the virus if you are within close proximity of someone
-                            who
-                            has
-                            COVID-19, or by touching a contaminated surface and then your eyes, nose or mouth.
-                        </p>
-                        <p><a class="btn btn-primary btn-lg"
-                              href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
-                              role="button">Learn more on who.int</a></p>
-                    </div>
-                </div>
-            </div>
-
-            <table id="dataTable" class="table table-bordered table-responsive-sm"></table>
-
-            <!-- JavaScript -->
-            <script src="js/hardcodeddata.js"></script>
-            <script src="js/app.js"></script>
-        </div>
-    </div>
 </body>
 </html>
