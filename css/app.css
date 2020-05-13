@@ -16,11 +16,13 @@
 
 html {
     font-family: Corbel;
+    transition: 0.2s ease all;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--font-color);
+    transition: 0.2s ease all;
 }
 
 .align-text-center {
@@ -52,9 +54,11 @@ body {
     overflow: auto;
 }
 
+.header-jumbotron {
+    border-radius: 0px;
+}
+
 .table {
     background-color: var(--bg-color);
     color: var(--font-color);
 }
-
-table

@@ -4,6 +4,9 @@ const defaultLocation = "World";
 
 let cachedData;
 const selectElement = document.getElementById('location');
+selectElement.onchange = function () {
+    processData(cachedData)
+};
 
 const linearPlotDiv = document.getElementById("linearPlot");
 const logPlotDiv = document.getElementById("logPlot");
@@ -12,12 +15,12 @@ const newPlotDiv = document.getElementById("newPlot");
 const toggleSwitch = document.getElementById("checkbox");
 toggleSwitch.addEventListener('change', switchTheme, false);
 
-selectElement.onchange = function () {
-    processData(cachedData)
-};
-
 window.onload = loadData();
 
+
+/**
+ * Carga inicial de los datos.
+ */
 function loadData() {
     const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
 
@@ -32,13 +35,17 @@ function loadData() {
         .then((response) => response.text()).then(text => parseAndProcess(text))
         .catch((error) => {
             console.error(error);
-            alert("Information could be old, beacause we couldn't reach the server.")
+            alert("Information could be old, because we couldn't reach the server.")
             parseAndProcess(getData());
         });
 
 }
 
-function parseAndProcess(text, download) {
+/**
+ * Parsea los datos y luego llama a que se muestren en pantalla
+ * @param text el texto en formato CSV
+ */
+function parseAndProcess(text) {
     const data = Papa.parse(text, {
         header: true,
         complete: function (results) {
@@ -49,9 +56,10 @@ function parseAndProcess(text, download) {
     });
 }
 
-
-
-
+/**
+ * Rellena el select con los diferentes paises para ver sus datos
+ * @param la información ya parseada en un arreglo de objetos
+ */
 function populateSelect(data) {
     const countries = getCountries(data);
 
@@ -69,6 +77,10 @@ function populateSelect(data) {
     })
 }
 
+/**
+ * Cambia el tema del sitio
+ * @param e el switch que se presionó
+ */
 function switchTheme(e) {
     if (e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -78,23 +90,39 @@ function switchTheme(e) {
         localStorage.setItem('theme', 'light');
     }
 
+
     Plotly.relayout(linearPlotDiv, getLinearLayout());
     Plotly.relayout(logPlotDiv, getLogLayout());
     Plotly.relayout(newPlotDiv, getNewLayout());
 }
 
+/**
+ * Procesa la información para mostrarla en pantalla.
+ * @param data la información en un arreglo de objetos
+ */
 function processData(data) {
+
     const currentLocation = getCurrentLocation();
 
     /* Filter data by country */
     const dataFiltered = data.filter(findByName, currentLocation);
+    createPlots(dataFiltered);
+    createTable(dataFiltered);
+}
 
+/**
+ * Crea los gráficos a partir de la información que se le pasa
+ * @param dataFiltered la información de un país dado
+ */
+function createPlots(dataFiltered) {
+    let i;
     const dates = [];
     const totalCases = [];
     const newCases = [];
     const totalDeaths = [];
     const newDeaths = [];
 
+    /* Me quedo unicamente con la informacíon que me interesa */
     dataFiltered.forEach((element) => {
         if (element["total_cases"] != "0") {
             dates.push(element["date"]);
@@ -107,10 +135,9 @@ function processData(data) {
 
     const totalDataNames = ["Total cases", "Total deaths"];
     const totalData = [totalCases, totalDeaths];
-
     const totalPlots = [];
 
-
+    /* Lleno los arreglos con la informacion para los plots del total*/
     for (i = 0; i < totalData.length; i++) {
         casePlot = {
             x: dates,
@@ -126,6 +153,8 @@ function processData(data) {
 
     const newPlots = [];
     var casePlot;
+
+    /* Lleno los arreglos con la información para los plots de cada día*/
     for (i = 0; i < newData.length; i++) {
         casePlot = {
             x: dates,
@@ -137,18 +166,22 @@ function processData(data) {
     }
 
     const layoutLog = getLogLayout();
-
     const layoutLinear = getLinearLayout();
-
     const layoutNew = getNewLayout();
 
     Plotly.newPlot(linearPlotDiv, totalPlots, layoutLinear, {displayModeBar: false, responsive: true});
     Plotly.newPlot(logPlotDiv, totalPlots, layoutLog, {displayModeBar: false, responsive: true});
     Plotly.newPlot(newPlotDiv, newPlots, layoutNew, {displayModeBar: false, responsive: true});
+}
 
-    let t = "<tbody>"
+/**
+ * Crea la tabla con la información que se le da
+ * @param dataFiltered la información de un pais dado
+ */
+function createTable(dataFiltered) {
+    let t = "";
     let tr;
-    for (var i = 0; i < dataFiltered.length; i++) {
+    for (i = 0; i < dataFiltered.length; i++) {
         if (dataFiltered[i].total_cases != "0") {
             tr = "<tr>";
             tr += "<td> " + dataFiltered[i].date + "</td>";
@@ -160,36 +193,52 @@ function processData(data) {
             t += tr;
         }
     }
-    t += "</tbody>";
-    const dataTable = document.getElementById("dataTable");
-    dataTable.innerHTML += t;
+
+    const dataTableBody = document.getElementById("dataTableBody");
+    dataTableBody.innerText = "";
+    dataTableBody.innerHTML += t;
 }
 
+/**
+ * Obtiene el color de fuente y la ubicación actual
+ * Se utiliza para actualizar el color de los graficos al cambiar de tema
+ * @returns {{fontColor: string, currentLocation: *}}
+ */
 function layoutConstants() {
-    const bgColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bg-color');
     const fontColor = getComputedStyle(document.documentElement)
         .getPropertyValue('--font-color');
     const currentLocation = getCurrentLocation();
-    return {bgColor, fontColor, currentLocation};
+    return {fontColor, currentLocation};
 }
 
-function getLayout(layoutType, title){
-    const {bgColor, fontColor, currentLocation} = layoutConstants();
+/**
+ * Devuelve el layout que para el gráfico, segun el layoutType que se pasa como parametro
+ * @param layoutType el tipo de layout del gráfico (linear o logaritmico)
+ * @param title el titulo del gráfico
+ * @returns el objeto layout correspondiente
+ */
+function getLayout(layoutType, title) {
+    const {fontColor, currentLocation} = layoutConstants();
     return {
-        title: currentLocation +": "+title,
+        title: currentLocation + ": " + title,
         yaxis: {
             type: layoutType,
-            autorange: true
+            autorange: true,
+            showgrid: false,
+            zeroline: false
         },
-        'plot_bgcolor': bgColor,
-        'paper_bgcolor': bgColor,
+        xaxis: {
+            showgrid: false,
+            zeroline: false
+        },
+        'plot_bgcolor': 'rgba(0,0,0,0)',
+        'paper_bgcolor': 'rgba(0,0,0,0)',
         'font': {
             'color': fontColor
         },
-        legend:{
-            x:0,
-            y:1
+        legend: {
+            x: 0,
+            y: 1
         }
     }
 }
@@ -207,6 +256,10 @@ function getNewLayout() {
     return getLayout("linear", "daily data")
 }
 
+/**
+ * Devuelve la ubicación actual en de la que se quiere visualizar información
+ * @returns el nombre de la ubicación
+ */
 function getCurrentLocation() {
     const opt = selectElement.options[selectElement.selectedIndex];
     let currentLocation;
@@ -222,6 +275,11 @@ function findByName(dataRow) {
     return dataRow["location"] == this;
 }
 
+/**
+ * Devuelve todos los paises que se contienen en data
+ * @param data la información parseada en un arreglo de objetos
+ * @returns {Set<any>}
+ */
 function getCountries(data) {
     const resultSet = new Set();
 
