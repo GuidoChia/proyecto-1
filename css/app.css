@@ -1,0 +1,64 @@
+:root {
+    --primary-color: #C5CAE9;
+    --secondary-color: #536390;
+    --font-color: #424242;
+    --bg-color: #fff;
+    --heading-color: #292922;
+}
+
+[data-theme="dark"] {
+    --primary-color: #303F9F;
+    --secondary-color: #818cab;
+    --font-color: #FFFFFF;
+    --bg-color: #161625;
+    --heading-color: #818cab;
+}
+
+html {
+    font-family: Corbel;
+    transition: 0.2s ease all;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    transition: 0.2s ease all;
+}
+
+.align-text-center {
+    text-align: center;
+}
+
+.btn {
+    background-color: var(--secondary-color);
+}
+
+.plotParent {
+    overflow: auto;
+    float: initial;
+}
+
+
+.img_fluid {
+    max-height: 100pt;
+    max-width: 100pt;
+}
+
+
+.form-control {
+    float: bottom;
+}
+
+.jumbotron {
+    background-color: var(--primary-color);
+    overflow: auto;
+}
+
+.header-jumbotron {
+    border-radius: 0px;
+}
+
+.table {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
